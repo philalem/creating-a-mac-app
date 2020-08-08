@@ -9,13 +9,18 @@
 import SwiftUI
 
 struct NavigationDetail: View {
+    @EnvironmentObject var userData: UserData
     var landmark: Landmark
+    
+    var landmarkIndex: Int {
+        userData.landmarks.firstIndex(where: {$0.id == landmark.id})!
+    }
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
                 HStack (alignment: .center, spacing: 24) {
-                    CircleImage(image: landmark.image.resizable())
+                    CircleImage(image: landmark.image.resizable(), shadowRadius: 4)
                         .frame(width: 160, height: 160)
                     
                     VStack(alignment: .leading) {
@@ -35,5 +40,6 @@ struct NavigationDetail: View {
 struct NavigationDetail_Previews: PreviewProvider {
     static var previews: some View {
         NavigationDetail(landmark: landmarkData[0])
+            .environmentObject(UserData())
     }
 }
