@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct NavigationDetail: View {
     @EnvironmentObject var userData: UserData
@@ -18,6 +19,21 @@ struct NavigationDetail: View {
     
     var body: some View {
         ScrollView {
+            MapView(coordinate: landmark.locationCoordinate)
+                .frame(height: 250)
+                .overlay(
+                    GeometryReader { proxy in
+                    Button("Open in Maps") {
+                        let destination = MKMapItem(placemark: MKPlacemark(coordinate: self.landmark.locationCoordinate))
+                        destination.name = self.landmark.name
+                        destination.openInMaps()
+                    }
+                    .frame(width: proxy.size.width, height: proxy.size.height, alignment: .bottomTrailing)
+                    .offset(x: -10, y: -10)
+                    
+                })
+            
+            
             VStack(alignment: .leading, spacing: 12) {
                 HStack (alignment: .center, spacing: 24) {
                     CircleImage(image: landmark.image.resizable(), shadowRadius: 4)
@@ -63,6 +79,7 @@ struct NavigationDetail: View {
             }
             .padding()
             .frame(maxWidth: 700)
+            .offset(x: 0, y: -50)
         }
     }
 }
